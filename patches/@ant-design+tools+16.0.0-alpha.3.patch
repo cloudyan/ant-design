@@ -1,0 +1,29 @@
+diff --git a/node_modules/@ant-design/tools/lib/getWebpackConfig.js b/node_modules/@ant-design/tools/lib/getWebpackConfig.js
+index 6c67cea..6cd5d14 100644
+--- a/node_modules/@ant-design/tools/lib/getWebpackConfig.js
++++ b/node_modules/@ant-design/tools/lib/getWebpackConfig.js
+@@ -58,8 +58,15 @@ function getWebpackConfig(modules) {
+     babelConfig.plugins.push(require.resolve('./replaceLib'));
+   }
+ 
++  // sourceMap 解决方案:
++  // 1. babelConfig.sourceMap = true;
++  // 2. `devtool: 'source-map',` 改为 `devtool: 'cheap-module-source-map',`
++  // 3. ts 也要生成 sourceMap, 在根目录的 tsconfig.json里改 `"sourceMap": true,`
++  babelConfig.sourceMap = true;
++
+   const config = {
+-    devtool: 'source-map',
++    // devtool: 'source-map',
++    devtool: 'cheap-module-source-map',
+ 
+     output: {
+       path: getProjectPath('./dist/'),
+@@ -112,6 +119,7 @@ function getWebpackConfig(modules) {
+           loader: resolve('babel-loader'),
+           options: babelConfig,
+         },
++        // 分析: tsx 会经过 ts-loader 和 babel-loader 的处理, 所以 sourceMap 关联不到 tsx
+         {
+           test: /\.tsx?$/,
+           use: [

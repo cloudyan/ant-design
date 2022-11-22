@@ -5,7 +5,7 @@
 *~
 ~*
 *.diff
-*.patch
+# *.patch
 *.bak
 .DS_Store
 Thumbs.db
